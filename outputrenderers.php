@@ -685,9 +685,14 @@ class core_renderer extends renderer_base {
                 }
             }
         } else {
+            require_once($CFG->dirroot.'/auth/googleoauth2/classes/provider/openam.php');
+            $provider = new provideroauth2openam();
+            $loginurl = $provider->getAuthorizationUrl();
+            $_SESSION['oauth2state_openam'] = $provider->state;
             $loggedinas = get_string('loggedinnot', 'moodle');
             if (!$loginpage && $withlinks) {
                 $loggedinas .= " (<a href=\"$loginurl\">".get_string('login').'</a>)';
+                $loggedinas .= '<script>$(function(){  var sso_url=$(".logininfo a").attr("href");  $("a[title=Entrar]").attr("href",sso_url);})</script>';
             }
         }
 
